@@ -90,7 +90,6 @@
             gap: 20px;
             align-items: center;
             justify-content: center;
-            /* Allow buttons to wrap if YES gets too big */
             flex-wrap: wrap; 
         }
 
@@ -116,8 +115,9 @@
             font-weight: bold;
         }
 
+        /* CHANGED: Increased margin-top to 100px so it sits much lower */
         #persuasion-text {
-            margin-top: 20px;
+            margin-top: 100px;
             font-size: 1.2rem;
             color: #d32f2f;
             font-style: italic;
@@ -207,7 +207,6 @@
             noBtn.style.transform = `scale(${noScale})`;
 
             // 2. Grow the YES button
-            // Grows by 0.3 each time (gets big fast!)
             let yesScale = 1 + (clickCount * 0.3);
             yesBtn.style.transform = `scale(${yesScale})`;
 
