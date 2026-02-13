@@ -16,7 +16,7 @@
         }
 
         /* =========================
-           NEW BACKGROUND HEART STYLES
+           BACKGROUND HEART STYLES
            ========================= */
         .bg-hearts-container {
             position: absolute;
@@ -29,19 +29,16 @@
             overflow: hidden;
         }
 
-        /* Creating the heart shape using CSS */
         .heart-bg {
             position: absolute;
             width: 20px;
             height: 20px;
             background-color: #ff4d4d; /* Red color */
-            opacity: 0; /* Start invisible */
-            /* Rotate to make the bottom point of heart */
+            opacity: 0; 
             transform: rotate(-45deg); 
-            /* The floating animation */
             animation: floatAndBeat linear infinite;
         }
-        /* The two round tops of the heart */
+        
         .heart-bg::before, .heart-bg::after {
             content: "";
             position: absolute;
@@ -53,30 +50,18 @@
         .heart-bg::before { top: -10px; left: 0; }
         .heart-bg::after { top: 0; left: 10px; }
 
-        /* Animation: float up and pulse (beat) */
         @keyframes floatAndBeat {
-            0% {
-                transform: translateY(110vh) scale(0.8) rotate(-45deg);
-                opacity: 1;
-            }
-            50% {
-                /* Beat bigger in the middle */
-                transform: translateY(50vh) scale(1.3) rotate(-45deg); 
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-10vh) scale(0.8) rotate(-45deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(110vh) scale(0.8) rotate(-45deg); opacity: 1; }
+            50% { transform: translateY(50vh) scale(1.3) rotate(-45deg); opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(0.8) rotate(-45deg); opacity: 0; }
         }
 
         /* =========================
            MAIN CONTENT STYLES
            ========================= */
-        /* A container to make sure content sits ON TOP of hearts */
         #main-content-wrapper {
             position: relative;
-            z-index: 10; /* Higher than background hearts */
+            z-index: 10;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -105,6 +90,8 @@
             gap: 20px;
             align-items: center;
             justify-content: center;
+            /* Allow buttons to wrap if YES gets too big */
+            flex-wrap: wrap; 
         }
 
         button {
@@ -113,7 +100,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; /* Smooth transition for sizing */
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
@@ -123,16 +110,10 @@
             font-weight: bold;
         }
 
-        #yes-btn:hover {
-            transform: scale(1.1);
-            background-color: #45a049;
-        }
-
         #no-btn {
             background-color: #f44336; /* Red */
             color: white;
             font-weight: bold;
-            transition: transform 0.2s; /* Smooth shrinking */
         }
 
         #persuasion-text {
@@ -151,7 +132,6 @@
         .big-love {
             font-size: 4rem;
             color: #e91e63;
-            /* The big text heartbeat animation */
             animation: textHeartbeat 1.5s infinite;
             margin-top: 20px;
             text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
@@ -192,56 +172,52 @@
 
     <script>
         // =========================
-        // NEW JAVASCRIPT TO CREATE BACKGROUND HEARTS
+        // BACKGROUND HEARTS LOGIC
         // =========================
         function createFloatingHearts() {
             const container = document.getElementById('bg-hearts');
-            const numHearts = 30; // Number of hearts to generate
+            const numHearts = 30; 
 
             for (let i = 0; i < numHearts; i++) {
-                // Create a new div for the heart
                 const heart = document.createElement('div');
                 heart.classList.add('heart-bg');
-
-                // Randomize horizontal position (0% to 100% across screen)
                 heart.style.left = `${Math.random() * 100}vw`;
-                
-                // Randomize animation duration (between 4s and 8s) so they move at different speeds
-                const duration = Math.random() * 4 + 4; 
-                heart.style.animationDuration = `${duration}s`;
-
-                // Randomize delay so they don't all start at once
+                heart.style.animationDuration = `${Math.random() * 4 + 4}s`;
                 heart.style.animationDelay = `${Math.random() * 5}s`;
-
-                // Add random slight size variation
-                const scaleVar = Math.random() * 0.5 + 0.5; // 0.5 to 1.0 scale base
-
                 container.appendChild(heart);
             }
         }
-
-        // Run the heart creator when page loads
         window.onload = createFloatingHearts;
 
 
         // =========================
-        // EXISTING BUTTON LOGIC
+        // BUTTON LOGIC
         // =========================
-        let noClickCount = 0;
+        let clickCount = 0;
         const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
         const persuasionText = document.getElementById('persuasion-text');
 
         function shrinkNo() {
-            noClickCount++;
-            // Shrink by 15% each time
-            let currentScale = 1 - (noClickCount * 0.15);
-            if (currentScale < 0.1) currentScale = 0.1;
-            noBtn.style.transform = `scale(${currentScale})`;
+            clickCount++;
+            
+            // 1. Shrink the NO button
+            let noScale = 1 - (clickCount * 0.15);
+            if (noScale < 0.1) noScale = 0.1;
+            noBtn.style.transform = `scale(${noScale})`;
 
-            if (noClickCount === 1) {
+            // 2. Grow the YES button
+            // Grows by 0.3 each time (gets big fast!)
+            let yesScale = 1 + (clickCount * 0.3);
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // 3. Change text
+            if (clickCount === 1) {
                 persuasionText.innerText = "cmon you want to say yes";
-            } else if (noClickCount === 2) {
+            } else if (clickCount === 2) {
                 persuasionText.innerText = "cmon im fun, say yes";
+            } else if (clickCount === 3) {
+                 persuasionText.innerText = "look how big the YES button is!";
             } else {
                 persuasionText.innerText = "okay seriously click yes now!";
             }
