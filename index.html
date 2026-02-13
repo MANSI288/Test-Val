@@ -1,15 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Happy Valentine's Day!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For my Valentine</title>
     <style>
-        body { background-color: #ffe6e6; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        h1 { color: #ff4d4d; }
-        p { font-size: 20px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e6; /* Light pink background */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevents scrolling */
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        /* Image styling */
+        .photo-container img {
+            max-width: 300px; /* Limits width so it fits nicely */
+            max-height: 400px; 
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            object-fit: cover;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button {
+            font-size: 1.5rem;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #yes-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            font-weight: bold;
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        #no-btn {
+            background-color: #f44336; /* Red */
+            color: white;
+            font-weight: bold;
+            transition: transform 0.2s; /* Smooth shrinking */
+        }
+
+        /* The text that appears when he clicks No */
+        #persuasion-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #d32f2f;
+            font-style: italic;
+            height: 30px; /* Keeps space so layout doesn't jump */
+        }
+
+        /* The hidden "Yay" screen */
+        #success-screen {
+            display: none;
+        }
+
+        .big-love {
+            font-size: 4rem;
+            color: #e91e63;
+            animation: heartbeat 1.5s infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
-    <h1>Happy Valentine's Day! ❤️</h1>
-    <p>I made this just for you.</p>
+
+    <div id="question-screen">
+        <h1>Will you be my valentine?</h1>
+        
+        <div class="photo-container">
+            <img src="stunning-cosmic-images-372415810.jpg.webp" alt="Us"> 
+        </div>
+
+        <div class="buttons">
+            <button id="yes-btn" onclick="sayYes()">Yes</button>
+            <button id="no-btn" onclick="shrinkNo()">No</button>
+        </div>
+        
+        <div id="persuasion-text"></div>
+    </div>
+
+    <div id="success-screen">
+        <h1>Yay!!!</h1>
+        <div class="big-love">I love you ❤️</div>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        const noBtn = document.getElementById('no-btn');
+        const persuasionText = document.getElementById('persuasion-text');
+
+        function shrinkNo() {
+            noClickCount++;
+            
+            // 1. Make the button smaller
+            // It shrinks by 15% each time
+            let currentScale = 1 - (noClickCount * 0.15);
+            
+            // Stop it from disappearing entirely (stops at 10% size)
+            if (currentScale < 0.1) currentScale = 0.1;
+            noBtn.style.transform = `scale(${currentScale})`;
+
+            // 2. Change the text
+            if (noClickCount === 1) {
+                persuasionText.innerText = "cmon you want to say yes";
+            } else if (noClickCount === 2) {
+                persuasionText.innerText = "cmon im fun, say yes";
+            } else {
+                // If he keeps clicking past 2 times
+                persuasionText.innerText = "okay seriously click yes now!";
+            }
+        }
+
+        function sayYes() {
+            // Hide the question screen
+            document.getElementById('question-screen').style.display = 'none';
+            // Show the success screen
+            document.getElementById('success-screen').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
